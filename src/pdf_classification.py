@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 
 # ----------------- 工具函数 -----------------
 def find_pdf_files(root_path):
-    """生成器：高效查找 PDF 文件"""
+    """生成器：查找 PDF 文件"""
     root_path = Path(root_path)
     seen = set()
 
@@ -62,7 +62,7 @@ def find_pdf_files(root_path):
             yield str(pdf_path)
 
 def process_single_pdf(pdf_path_str):
-    """处理单个 PDF，只返回路径、页数、大小(MB)、类别"""
+    """处理单个 PDF，返回路径、页数、大小(MB)、类别"""
     pdf_path = Path(pdf_path_str)
     info = {
         'file_path': str(pdf_path),
@@ -151,7 +151,7 @@ def process_pdfs(root_path, csv_file=DEFAULT_CSV_FILE, workers=None, resume=True
         futures = {executor.submit(process_single_pdf, p): p for p in pdf_gen}
 
         last_time = time.time()
-        last_count = 0  # 用于瞬时速率计算
+        last_count = 0
 
         for fut in as_completed(futures):
             res = fut.result()
